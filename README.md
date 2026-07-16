@@ -94,7 +94,7 @@ This helped me understand how an agent uses external tools and evidence to inves
 
 ### Investigation result
 
-![Investigation result](docs/investigation-result.png)
+![Investigation result](docs/agent-investigation-result.png)
 
 ## Run locally
 
