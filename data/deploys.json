@@ -1,0 +1,34 @@
+[
+  {
+    "ts": "2026-04-22T09:14:05Z",
+    "service": "cart",
+    "commit": "e21b6c9",
+    "author": "dave@shop.io",
+    "status": "success",
+    "summary": "bump lodash to 4.17.22"
+  },
+  {
+    "ts": "2026-04-22T11:02:33Z",
+    "service": "auth",
+    "commit": "9f1e2d4",
+    "author": "bob@shop.io",
+    "status": "success",
+    "summary": "add rate limiting to /refresh"
+  },
+  {
+    "ts": "2026-04-22T14:31:18Z",
+    "service": "checkout",
+    "commit": "a3f9c21",
+    "author": "alice@shop.io",
+    "status": "success",
+    "summary": "refactor order summary builder for readability"
+  },
+  {
+    "ts": "2026-04-22T14:55:40Z",
+    "service": "inventory",
+    "commit": "7b3e8f0",
+    "author": "carol@shop.io",
+    "status": "success",
+    "summary": "add SKU validation on reserve endpoint"
+  }
+]

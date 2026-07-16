@@ -1,0 +1,47 @@
+commit a3f9c21e8b4d2f1a9c0e7d3b5f8a2c4e6d9b1f0a
+Author: Alice Chen <alice@shop.io>
+Date:   Wed Apr 22 14:29:51 2026 +0000
+
+    refactor order summary builder for readability
+
+    The old list comprehension was getting hard to follow. Split it into
+    an explicit loop so the per-order enrichment logic is clearer.
+
+diff --git a/checkout/handlers.py b/checkout/handlers.py
+index 8f3a2b1..c4d9e7f 100644
+--- a/checkout/handlers.py
++++ b/checkout/handlers.py
+@@ -41,22 +41,24 @@ class CheckoutSummaryHandler(BaseHandler):
+     def build_summary(self, user_id: str) -> dict:
+         orders = Order.objects.filter(user_id=user_id, status="open")
+-        order_ids = [o.id for o in orders]
+-
+-        # Single query, then group in memory
+-        all_items = OrderItem.objects.filter(order_id__in=order_ids).select_related("sku")
+-        items_by_order = defaultdict(list)
+-        for item in all_items:
+-            items_by_order[item.order_id].append(item)
+-
+-        summaries = [
+-            self._summarize(o, items_by_order[o.id])
+-            for o in orders
+-        ]
++
++        summaries = []
++        for order in orders:
++            # fetch the items for this order
++            items = OrderItem.objects.filter(order_id=order.id).select_related("sku")
++            log.debug(
++                'db_query sql="SELECT * FROM order_items WHERE order_id = ?" params=[%s]',
++                order.id,
++            )
++            summaries.append(self._summarize(order, list(items)))
++
+         return {
+             "user_id": user_id,
+             "orders": summaries,
+             "total_cents": sum(s["subtotal_cents"] for s in summaries),
+         }
+
+     def _summarize(self, order: Order, items: list[OrderItem]) -> dict:
+         return {
